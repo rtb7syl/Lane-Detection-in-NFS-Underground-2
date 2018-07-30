@@ -2,16 +2,15 @@ import cv2
 import numpy as np
 from PIL import ImageGrab
 import time
-
+from direct_key_inputs import PressKey, ReleaseKey, W, A, S, D
 
 def process_img(image):
     original_image = image
     # convert to gray
     processed_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # edge detection
-    processed_img =  cv2.Canny(processed_img, threshold1 = 200, threshold2=300)
+    processed_img =  cv2.Canny(processed_img, 60, 200)
     return processed_img
-
 
 last_time = time.time()
 while(True):
