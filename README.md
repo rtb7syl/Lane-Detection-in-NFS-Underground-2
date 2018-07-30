@@ -1,2 +1,2 @@
-# Dicey-ViceCity
-AI plays GTA Vice City
+# Dicey-NFS-UG-2
+AI plays NFS Underground 2
