@@ -14,13 +14,17 @@ def process_img(image):
     # convert to gray
     processed_img = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     # edge detection
-    processed_img =  cv2.Canny(processed_img,60,200)
+    processed_img =  cv2.Canny(processed_img,50,200)
     # vertices which define the ROI
     vertices = np.array([[tl_width,0.66*(br_height - tl_height)],[tl_width,br_height],
                          [br_width,br_height],[br_width, 0.66*(br_height-tl_height)],
                          [0.75*(br_width-tl_width), 0.5*(br_height-tl_height)],
                          [0.25*(br_width-tl_width), 0.5*(br_height-tl_height)]], np.int32)
     processed_img = roi(processed_img, [vertices])
+    # Find and draw lines on the edge detected image
+    lines = cv2.HoughLinesP(processed_img, 1, np.pi/180, 70, 20, 5)
+    draw_lines(processed_img,lines)
+    
     return processed_img
 
 
@@ -34,11 +38,23 @@ def roi(img, vertices):
     return masked
     
 
-def main():   
+def draw_lines(img,lines):
+    for line in lines:
+        coords = line[0]
+        cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]),
+                 [255,255,255], 3)
+
+def main():
+    # This gives us time to set things up
+    for i in list(range(4))[::-1]:
+        print(i+1)
+        time.sleep(1)
+    
     last_time = time.time()
     while(True):
         # Grab image from screen
-        screen = np.array(ImageGrab.grab(bbox=(tl_width, tl_height, br_width, br_height)))
+        screen = np.array(ImageGrab.grab(bbox=(tl_width, tl_height,
+                                               br_width, br_height)))
         print("Loop time : {}".format(time.time() - last_time))
         last_time = time.time()
         new_screen = process_img(screen)
