@@ -13,8 +13,10 @@ br_height = 510  # bottom right height, i.e bottom right y coordinate
 def process_img(image):
     # convert to gray
     processed_img = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    processed_img = cv2.blur(processed_img,(3,3))
+    cv2.imshow('Window_1',processed_img)
     # edge detection
-    processed_img =  cv2.Canny(processed_img,50,200)
+    processed_img =  cv2.Canny(processed_img,30,90)
     # vertices which define the ROI
     vertices = np.array([[tl_width,0.66*(br_height - tl_height)],[tl_width,br_height],
                          [br_width,br_height],[br_width, 0.66*(br_height-tl_height)],
@@ -22,7 +24,8 @@ def process_img(image):
                          [0.25*(br_width-tl_width), 0.5*(br_height-tl_height)]], np.int32)
     processed_img = roi(processed_img, [vertices])
     # Find and draw lines on the edge detected image
-    lines = cv2.HoughLinesP(processed_img, 1, np.pi/180, 70, 20, 5)
+    lines = cv2.HoughLinesP(processed_img, 1, np.pi/180, 100, np.array([]),
+                            20, 10)
     draw_lines(processed_img,lines)
     
     return processed_img
@@ -39,10 +42,12 @@ def roi(img, vertices):
     
 
 def draw_lines(img,lines):
-    for line in lines:
-        coords = line[0]
-        cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]),
-                 [255,255,255], 3)
+    # To handle situations when no lines are detected
+    if lines is not None:
+        for line in lines:
+            coords = line[0]
+            cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]),
+                     [255,255,255], 3)
 
 def main():
     # This gives us time to set things up
