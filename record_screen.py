@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from PIL import ImageGrab
 import time
+import math
 from direct_key_inputs import PressKey, ReleaseKey, W, A, S, D
 
 tl_width = 0  # top left width, i.e top left x coordinate
@@ -44,6 +45,22 @@ def roi(img, vertices):
 def draw_lines(img,lines):
     # To handle situations when no lines are detected
     if lines is not None:
+        left_line_x = []
+        left_line_y = []
+        right_line_x = []
+        right_line_y = []
+        for line in lines:
+            for x1, y1, x2, y2 in line:
+                slope = (y2 - y1) / (x2 - x1 + 0.001)  # Calculating the slope.
+                if math.fabs(slope) < 0.5:  # Only consider extreme slope
+                    continue
+                if slope <= 0:  # If the slope is negative, left group.
+                    left_line_x.extend([x1, x2])
+                    left_line_y.extend([y1, y2])
+                else:  # Otherwise, right group.
+                    right_line_x.extend([x1, x2])
+                    right_line_y.extend([y1, y2])
+
         for line in lines:
             coords = line[0]
             cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]),
@@ -65,6 +82,7 @@ def main():
         new_screen = process_img(screen)
         cv2.imshow('Window',new_screen)
         # Exit if pressed 'q'
+        break
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
