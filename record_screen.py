@@ -126,10 +126,7 @@ def draw_lines(img,lines):
 ##                cv2.line(img, (lane[0], lane[1]),
 ##                         (lane[2], lane[3]),
 ##                         [255,255,255], 3)
-<<<<<<< HEAD
-=======
 
->>>>>>> ec70744a617dd6ae043d76ef86abd1d709e9d710
 
 def main():
     # This gives us time to set things up
