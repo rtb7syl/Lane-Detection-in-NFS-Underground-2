@@ -80,12 +80,12 @@ def draw_lines(img,lines):
         # Try Except used to handle cases when no lanes are detected
         try:
             cv2.line(img, (left_line_x[0], left_line_y[0]), (left_line_x[-1], left_line_y[-1]),
-                 [255,255,255], 3)
+                 [255, 0, 0], 3)
         except:
             pass
         try:
             cv2.line(img, (right_line_x[0], right_line_y[0]), (right_line_x[-1], right_line_y[-1]),
-                 [255,255,255], 3)
+                 [255,0, 0], 3)
         except:
             pass
 
