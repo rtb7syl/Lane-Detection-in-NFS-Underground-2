@@ -32,3 +32,7 @@ Some results are shown below :
   <img src="./images/image_4.png" alt="images/image_4.png" width="410" height="300">
   <img src="./images/image_1.png" alt="images/image_1.png" width="410" height="300">
 </p>
+
+## From Ideas to Code
+
+The original plan was to somehow drive the car in this game, but due to inconsistent lanes and never ending night this is what we ended up with.
